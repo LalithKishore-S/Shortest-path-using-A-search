@@ -91,23 +91,30 @@ def main():
     
     path_length=1
     node_min=node(-1,-1,0)
+    path=(current,)
+    obstacle_matrix[1][1]=True
 
     while(current != final):
         neighbour=compute_neighbours(current,obstacle_matrix,4,4)
-        min=-float('inf')
+        min=float('inf')
+        print(len(neighbour))
         for neighbours in neighbour:
             sub_initial=(neighbours.x,neighbours.y)
             neighbours.fn=path_length+heuristic_function(sub_initial,final)
+            print(neighbours)
             if min > neighbours.fn:
                 min=neighbours.fn
                 node_min=neighbours
+                print("node min=",node_min)
         current=(node_min.x,node_min.y)
+        path+=(current,)
         Trail_tracker_matrix[current[0]][current[1]]=True
     
     print(Trail_tracker_matrix)
+    print(path)
 
 #    print(Trail_tracker_matrix)
- #   print(obstacle_matrix)
+    print(obstacle_matrix)
 #    print(initial)
  #   print(final)
 
