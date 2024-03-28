@@ -169,6 +169,9 @@ def main():
 	m = ROW
 	n = COL
 
+	grid[0, 0] = 1
+	grid[m-1, n-1] = 1
+
 	# Define the source and destination
 	src = [ROW-1, COL-1]
 	dest = [0, 0]
