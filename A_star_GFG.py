@@ -54,6 +54,7 @@ def trace_path(cell_details, dest):
 	for i in path:
 		print("->", i, end=" ")
 	print()
+	return path
 
 # Implement the A* search algorithm
 def a_star_search(grid, src, dest):
@@ -118,9 +119,9 @@ def a_star_search(grid, src, dest):
 					cell_details[new_i][new_j].parent_j = j
 					print("The destination cell is found")
 					# Trace and print the path from source to destination
-					trace_path(cell_details, dest)
+					path = trace_path(cell_details, dest)
 					found_dest = True
-					return
+					return path
 				else:
 					# Calculate the new f, g, and h values
 					g_new = cell_details[i][j].g + 1.0
@@ -143,6 +144,8 @@ def a_star_search(grid, src, dest):
 		print("Failed to find the destination cell")
 
 def main():
+	import numpy as np
+
 	# Define the grid (1 for unblocked, 0 for blocked)
 	grid = [
 		[1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
@@ -155,38 +158,57 @@ def main():
 		[1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
 		[1, 1, 1, 0, 0, 0, 1, 0, 0, 1]
 	]
+	grid = np.array(grid)
+	dim = (np.random.randint(5, 10), np.random.randint(5, 10))
+
+	grid = np.random.choice([0, 1], size=dim, p=(0.25, 0.75))
+	global ROW, COL
+	ROW = grid.shape[0]
+	COL = grid.shape[1]
+
+	m = ROW
+	n = COL
 
 	# Define the source and destination
-	src = [8, 0]
+	src = [ROW-1, COL-1]
 	dest = [0, 0]
 
 	# Run the A* search algorithm
-	a_star_search(grid, src, dest)
+	path = None
+	path = a_star_search(grid, src, dest)
 
 	import matplotlib.pyplot as plt
-	import numpy as np
 
 	plt.imshow(grid, cmap='viridis', interpolation='nearest')
 	plt.colorbar()
 
-	import matplotlib.ticker as ticker
-
 	# Customize x-axis scale for labels
-	x_labels = [i for i in range(10)]
-	plt.xticks(np.arange(10), x_labels)
+	x_labels = [i for i in range(n)]
+	plt.xticks(np.arange(n), x_labels)
 
 	# Customize y-axis scale for labels
-	y_labels = [i for i in range(9)]
-	plt.yticks(np.arange(9), y_labels)
+	y_labels = [i for i in range(m)]
+	plt.yticks(np.arange(m), y_labels)
 
 	# Draw grid lines
-	ax = plt.gca()	
-	ax.set_xticks(np.arange(-0.5, 10.5), minor=True)
-	ax.set_yticks(np.arange(-0.5, 9.5), minor=True)
+	ax = plt.gca()
+	ax.set_xticks(np.arange(-0.5, n), minor=True)
+	ax.set_yticks(np.arange(-0.5, m), minor=True)
 	ax.grid(which='minor', color='black', linestyle='-', linewidth=0.5)
 
-	plt.text(src[1], src[0], 'FROM', ha='center', va='center', color='green')
+	import matplotlib.patches as mpatches
+	colors = plt.colormaps['viridis']
+	legend_patches = [mpatches.Patch(color=colors(0), label='blocked'), mpatches.Patch(color=colors(1000), label='free')]
+	plt.legend(handles=legend_patches, title='Legend', loc='upper right')
+
+	plt.text(src[1], src[0], 'FROM', ha='center', va='center', color='red')
 	plt.text(dest[1], dest[0], 'TO', ha='center', va='center', color='red')
+
+	if path is not None:
+		x_val = [i[1] for i in path]
+		y_val = [i[0] for i in path]
+		plt.scatter(x_val, y_val)
+
 	plt.show()
 
 if __name__ == "__main__":
