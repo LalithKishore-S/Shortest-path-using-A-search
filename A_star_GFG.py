@@ -163,5 +163,31 @@ def main():
 	# Run the A* search algorithm
 	a_star_search(grid, src, dest)
 
+	import matplotlib.pyplot as plt
+	import numpy as np
+
+	plt.imshow(grid, cmap='viridis', interpolation='nearest')
+	plt.colorbar()
+
+	import matplotlib.ticker as ticker
+
+	# Customize x-axis scale for labels
+	x_labels = [i for i in range(10)]
+	plt.xticks(np.arange(10), x_labels)
+
+	# Customize y-axis scale for labels
+	y_labels = [i for i in range(9)]
+	plt.yticks(np.arange(9), y_labels)
+
+	# Draw grid lines
+	ax = plt.gca()	
+	ax.set_xticks(np.arange(-0.5, 10.5), minor=True)
+	ax.set_yticks(np.arange(-0.5, 9.5), minor=True)
+	ax.grid(which='minor', color='black', linestyle='-', linewidth=0.5)
+
+	plt.text(src[1], src[0], 'FROM', ha='center', va='center', color='green')
+	plt.text(dest[1], dest[0], 'TO', ha='center', va='center', color='red')
+	plt.show()
+
 if __name__ == "__main__":
 	main()
