@@ -131,10 +131,10 @@ def main():
         1: 'Abinand Hospital',
         2: 'Ukkadam Bus Stand',
         3: 'Podanur Junction',
-        4: 'Sungam Junction Coimbatore',
+        4: 'Nehru Park Coimbatore',
         5: 'Ramanathapuram Coimbatore',
         6: 'Lakshmi Mills Coimbatore',
-        7: 'Perks Road Coimbatore',
+        7: 'Perks Sports Academy Coimbatore',
         8: 'Fun Republic Mall Coimbatore',
         9: 'PSG College of Technology'
     }
