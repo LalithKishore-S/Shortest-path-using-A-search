@@ -50,7 +50,7 @@ def calculate_h_value(place, dest):
     r=6571
     return 2*r*math.asin(math.sqrt(math.sin(math.radians((dest.latitude-place.latitude)/2))**2+math.cos(math.radians(place.latitude))*math.cos(math.radians(dest.latitude))*math.sin(math.radians((dest.longitude-place.longitude)/2))**2))
  
-def trace_path(cell_details, dest):
+def trace_path(cell_details, dest,locations):
     print("The Path is ")
     path = []
     place = dest
@@ -62,23 +62,11 @@ def trace_path(cell_details, dest):
  
     path.append(place+1)
     path.reverse()
- 
-    locations = {
-        1: 'Sundarapuram Coimbatore',
-        2: 'Ukkadam Bus Stand',
-        3: 'Podanur Junction',
-        4: 'Sungam Junction Coimbatore',
-        5: 'Ramanathapuram Coimbatore',
-        6: 'Lakshmi Mills Coimbatore',
-        7: 'Perks Road Coimbatore',
-        8: 'Fun Republic Mall Coimbatore',
-        9: 'PSG College of Technology'
-    }
     for i in path:
         print("->", locations[i], end=" ")
     print()
  
-def a_star_search(adj_list,adj_matrix, src, dest, block, loc):
+def a_star_search(adj_list,adj_matrix, src, dest, block, loc,places):
 
     if not is_unblocked(block, src) or not is_unblocked(block, dest):
         print("Source or the destination is blocked")
@@ -118,7 +106,7 @@ def a_star_search(adj_list,adj_matrix, src, dest, block, loc):
                 if is_destination(new_i, dest):
                     place_details[new_i].parent = i
                     print("The destination cell is found")
-                    trace_path(place_details, dest)                     
+                    trace_path(place_details, dest,places)                     
                     found_dest = True
                     return
                 else:
@@ -140,7 +128,7 @@ def main():
    nx_graph = nx.MultiGraph()
 
    places = {
-        1: 'Sundarapuram Coimbatore',
+        1: 'Abinand Hospital',
         2: 'Ukkadam Bus Stand',
         3: 'Podanur Junction',
         4: 'Sungam Junction Coimbatore',
@@ -223,7 +211,7 @@ def main():
    if check_block=="yes":
        blocked_place=int(input("Enter the blocked place's corresponding number: "))
 
-   a_star_search(adj_list, adj_matrix, src, dest, blocked_place, loc)
+   a_star_search(adj_list, adj_matrix, src, dest, blocked_place, loc, places)
 
 
 if __name__=='__main__':
