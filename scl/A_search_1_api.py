@@ -28,7 +28,6 @@ def generate_adj_list(pyvis_graph):
         adj_list[i] = []
 
     for i in EDGES:
-        print(i)
         adj_list[i['from']].append(i['to'])
         adj_list[i['to']].append(i['from'])
     #print(adj_list)
