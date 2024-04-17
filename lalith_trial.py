@@ -199,12 +199,12 @@ def visualize_grid_with_robots(grid,robot1, robot2):
         if t<len(robot1_positions):
             plt.scatter(robot1_positions[t][1], robot1_positions[t][0], color='blue', label='Robot 1')
         else:
-            temp=t-1
+            temp=len(robot1_positions)-1
             plt.scatter(robot1_positions[temp][1], robot1_positions[temp][0], color='blue', label='Robot 1')
         if t<len(robot2_positions):
             plt.scatter(robot2_positions[t][1], robot2_positions[t][0], color='green', label='Robot 2')
         else:
-            temp=t-1
+            temp=len(robot1_positions)-1
             plt.scatter(robot2_positions[temp][1], robot2_positions[temp][0], color='green', label='Robot 2')
         plt.legend()
 
