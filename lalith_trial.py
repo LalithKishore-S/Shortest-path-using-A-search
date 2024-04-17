@@ -1,5 +1,8 @@
 import math
 import heapq
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.patches as mpatches
 
 class robot:
     def __init__(self,p,src,dest):
@@ -150,11 +153,72 @@ def a_star_search(grid, src, dest):
 	if not found_dest:
 		print("Failed to find the destination cell")
 
+def visualize_grid_with_robots(grid,robot1, robot2):
+    m, n = grid.shape
+    temp=0
+    src1=robot1.src
+    src2=robot2.src
+    dest1=robot1.dest
+    dest2=robot2.dest
+    robot1_positions=robot1.path
+    robot2_positions=robot2.path
+    plt.ion()  # Turn on interactive mode
+
+    for t in range(max(len(robot1_positions),len(robot2_positions))):
+        plt.clf()  # Clear the previous plot
+        plt.imshow(grid, cmap='viridis', interpolation='nearest')
+        plt.colorbar()
+
+        # Customize x-axis scale for labels
+        x_labels = [i for i in range(n)]
+        plt.xticks(np.arange(n), x_labels)
+
+        # Customize y-axis scale for labels
+        y_labels = [i for i in range(m)]
+        plt.yticks(np.arange(m), y_labels)
+
+        # Draw grid lines
+        ax = plt.gca()
+        ax.set_xticks(np.arange(-0.5, n), minor=True)
+        ax.set_yticks(np.arange(-0.5, m), minor=True)
+        ax.grid(which='minor', color='black', linestyle='-', linewidth=0.5)
+
+        # Create legend patches
+        colors = plt.cm.viridis
+        legend_patches = [mpatches.Patch(color=colors(0), label='blocked'),
+                          mpatches.Patch(color=colors(255), label='free')]  # Corrected colormap index
+        plt.legend(handles=legend_patches, title='Legend', loc='upper right')
+
+        # Add text for source and destination
+        plt.text(src1[1], src1[0], 'FROM', ha='center', va='center', color='red')
+        plt.text(dest1[1], dest1[0], 'TO', ha='center', va='center', color='red')
+        plt.text(src2[1], src2[0], 'FROM', ha='center', va='center', color='red')
+        plt.text(dest2[1], dest2[0], 'TO', ha='center', va='center', color='red')
+
+        # Plot the robots
+        if t<len(robot1_positions):
+            plt.scatter(robot1_positions[t][1], robot1_positions[t][0], color='blue', label='Robot 1')
+        else:
+            temp=t-1
+            plt.scatter(robot1_positions[temp][1], robot1_positions[temp][0], color='blue', label='Robot 1')
+        if t<len(robot2_positions):
+            plt.scatter(robot2_positions[t][1], robot2_positions[t][0], color='green', label='Robot 2')
+        else:
+            temp=t-1
+            plt.scatter(robot2_positions[temp][1], robot2_positions[temp][0], color='green', label='Robot 2')
+        plt.legend()
+
+        plt.pause(0.5)  # Pause for a short time to show the plot
+
+    plt.ioff()  # Turn off interactive mode after the loop
+    plt.show()
+    
+    
 def main():
    import numpy as np
 
 	# Define the grid (1 for unblocked, 0 for blocked)
-   grid = [
+   grid = np.array([
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -163,7 +227,7 @@ def main():
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
    robots=[]
    for i in range(2):
        s_x=int(input("Enter the source x for robot %d :"%(i+1)))
@@ -205,6 +269,16 @@ def main():
    robots[0].path_time.append((robots[0].dest[0],robots[0].dest[1],0))
    print(robots[0].path_time)
    print(robots[1].path_time)  
+   
+   for i in range(len(robots[0].path_time)):
+       if robots[0].path_time[i][2]==1:
+           robots[0].path.insert(i+1,robots[0].path[i])
+   for i in range(len(robots[1].path_time)):
+       if robots[1].path_time[i][2]==1:
+           robots[1].path.insert(i+1,robots[1].path[i])
+   print(robots[0].path)
+   print(robots[1].path) 
+   visualize_grid_with_robots(grid,robots[0], robots[1])
        
 if __name__=="__main__":
     main()
